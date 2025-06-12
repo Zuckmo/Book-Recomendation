@@ -91,17 +91,38 @@ Langkah-langkah utama:
 - `get_recommendations(book_id, k)`: Rekomendasi berdasarkan ID (untuk evaluasi).
 - `recommend_partial(book_title)`: Fuzzy matching untuk pencarian.
 
+### Penjelasan Output: Similarity Matrix
+- Shape dari similarity matrix: (9850, 9850)
+- Terdapat 9.850 buku unik dalam sistem rekomendasi.
+- Matriks ini adalah matriks simetri ukuran 9850 x 9850.
+
+Contoh isi similarity matrix:
+          0         1         2         3         4
+0  1.000000  0.463594  0.555042  0.393592  0.464165
+1  0.463594  1.000000  0.378306  0.340730  0.373731
+2  0.555042  0.378306  1.000000  0.376996  0.380583
+3  0.393592  0.340730  0.376996  1.000000  0.284297
+4  0.464165  0.373731  0.380583  0.284297  1.000000
+
+Nilai diagonal (misal similarity[0][0] = 1.0) menandakan buku dibandingkan dengan dirinya sendiri.
+Nilai non-diagonal menunjukkan kemiripan antar buku.
+Misalnya: Buku ke-0 paling mirip dengan buku ke-2 (nilai 0.555042).
+
+
 ---
 
 ## 📈 Evaluasi
 
 ### 1. Precision
-- Mengukur persentase buku rekomendasi yang memiliki rating ≥ 4 dari 1000 sampel.
-- Hasil precision menunjukkan tingkat relevansi sistem terhadap kualitas buku.
+Average Precision (AP): 0.73
+
+Nilai Average Precision sebesar 0.73 menunjukkan bahwa rekomendasi yang diberikan cukup akurat pada level individual—artinya, urutan item yang direkomendasikan cukup tepat dalam mencakup item yang relevan. Skor ini dekat dengan 1, yang berarti precision di antara daftar rekomendasi cukup baik.
 
 ### 2. Mean Average Precision (MAP)
-- Evaluasi kesesuaian genre antara buku asli dan buku yang direkomendasikan.
-- Skor MAP dihitung dari banyaknya genre yang cocok dalam rekomendasi.
+Mean Average Precision (MAP): 0.47
+
+Nilai MAP sebesar 0.47 menunjukkan rata-rata dari precision across multiple queries (dalam hal ini, mungkin rekomendasi untuk beberapa pengguna atau buku). Meskipun nilainya tidak setinggi AP individual, MAP = 0.47 masih dapat dikategorikan sebagai hasil yang cukup baik untuk sistem rekomendasi berbasis konten (content-based filtering). Artinya, dari semua pengguna/buku yang diuji, secara rata-rata sistem mampu memberikan rekomendasi yang relevan hampir separuh dari daftar yang diberikan.
+
 
 ---
 
