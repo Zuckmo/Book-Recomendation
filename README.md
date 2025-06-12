@@ -1,33 +1,33 @@
-# 📚 Book Recommendation System
+#  Book Recommendation System
 
-## 🧭 Domain Proyek
+##  Domain Proyek
 Proyek ini berada di domain **Rekomendasi Buku** menggunakan teknik **machine learning** dan **pemrosesan bahasa alami (NLP)**. Sistem ini bertujuan membantu pengguna menemukan buku yang relevan dengan preferensi mereka berdasarkan deskripsi, genre, dan rating buku.
 
 ---
 
-## 🎯 Latar Belakang
+##  Latar Belakang
 Di era digital, jumlah buku yang tersedia secara daring semakin banyak, membuat pengguna kesulitan memilih bacaan yang sesuai. Oleh karena itu, sistem rekomendasi menjadi solusi penting dalam menyaring informasi dan menawarkan buku yang sesuai dengan selera pembaca.
 
 ---
 
-## 💡 Business Understanding
+##  Business Understanding
 Platform penyedia buku atau e-commerce seperti Goodreads dan Amazon membutuhkan sistem rekomendasi yang efisien untuk meningkatkan pengalaman pengguna dan mendorong keterlibatan serta penjualan.
 
 ---
 
-## ❓ Problem Statement
+##  Problem Statement
 Bagaimana membangun sistem rekomendasi buku yang dapat memberikan saran bacaan relevan berdasarkan deskripsi, genre, dan rating buku dari dataset Goodreads?
 
 ---
 
-## 🎯 Goals
+##  Goals
 - Mengembangkan sistem rekomendasi buku berbasis konten (content-based filtering).
 - Menganalisis data buku untuk memahami preferensi pembaca.
 - Menyediakan rekomendasi buku yang akurat dan relevan.
 
 ---
 
-## 🛠️ Solution Statements
+##  Solution Statements
 - Melakukan eksplorasi dan pra-pemrosesan data deskriptif dan numerik.
 - Menggunakan metode TF-IDF dan normalisasi fitur numerik.
 - Menghitung kemiripan antar buku menggunakan cosine similarity.
@@ -35,7 +35,7 @@ Bagaimana membangun sistem rekomendasi buku yang dapat memberikan saran bacaan r
 
 ---
 
-## 🧾 Data Understanding
+##  Data Understanding
 
 Dataset berisi informasi 10.000 buku dari Goodreads dengan 8 kolom berikut:
 
@@ -53,7 +53,7 @@ Dataset berisi informasi 10.000 buku dari Goodreads dengan 8 kolom berikut:
 
 ---
 
-## 📊 Exploratory Data Analysis
+##  Exploratory Data Analysis
 
 Analisis dilakukan untuk memahami tren dan distribusi data:
 
@@ -64,7 +64,7 @@ Analisis dilakukan untuk memahami tren dan distribusi data:
 
 ---
 
-## 🧹 Data Preparation
+##  Data Preparation
 
 Langkah-langkah utama:
 - Menghapus duplikat dan data kosong.
@@ -80,7 +80,7 @@ Langkah-langkah utama:
 
 ---
 
-## 🤖 Model Development
+##  Model Development
 
 ### Algoritma:
 - Menggunakan **cosine similarity** antara vektor buku.
@@ -111,7 +111,7 @@ Misalnya: Buku ke-0 paling mirip dengan buku ke-2 (nilai 0.555042).
 
 ---
 
-## 📈 Evaluasi
+##  Evaluasi
 
 ### 1. Precision
 Average Precision (AP): 0.73
@@ -126,7 +126,7 @@ Nilai MAP sebesar 0.47 menunjukkan rata-rata dari precision across multiple quer
 
 ---
 
-## 📦 Dependencies
+##  Dependencies
 
 - `pandas`, `numpy`
 - `matplotlib`, `seaborn`
@@ -136,14 +136,14 @@ Nilai MAP sebesar 0.47 menunjukkan rata-rata dari precision across multiple quer
 
 ---
 
-## 🧑‍💻 Author
+##  Author
 
 - Zuckmo - [GitHub](https://github.com/Zuckmo)
 - Sistem dikembangkan dan diuji di Google Colab.
 
 ---
 
-## 📎 Referensi Dataset
+##  Referensi Dataset
 
 - [goodreads_data.csv](https://raw.githubusercontent.com/Zuckmo/Book-Recomendation/refs/heads/main/goodreads_data.csv)
 
