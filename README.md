@@ -69,7 +69,7 @@ Analisis dilakukan untuk memahami tren dan distribusi data:
 Langkah-langkah utama:
 - Menghapus duplikat dan data kosong.
 - Pembersihan deskripsi menggunakan regex dan lowercasing.
-- Lemmatization dan token filtering untuk deskripsi.
+- Token filtering untuk deskripsi.
 - Ekstraksi genre utama dari string genre.
 - Transformasi `Num_Ratings` dari teks ke integer.
 - Penambahan fitur baru: panjang deskripsi (jumlah kata).
@@ -107,6 +107,42 @@ Contoh isi similarity matrix:
 Nilai diagonal (misal similarity[0][0] = 1.0) menandakan buku dibandingkan dengan dirinya sendiri.
 Nilai non-diagonal menunjukkan kemiripan antar buku.
 Misalnya: Buku ke-0 paling mirip dengan buku ke-2 (nilai 0.555042).
+
+---
+
+Contoh Rekomendasi buku untuk 'The Giving Tree':
+
++-------------------------------------------+------------------+-------------------------------------------------------------------------------------------+--------------+
+| Book                                      | Author           | Genres                                                                                    |   Avg_Rating |
++===========================================+==================+===========================================================================================+==============+
+| Where the Sidewalk Ends                   | Shel Silverstein | ['Poetry', 'Childrens', 'Classics', 'Fiction', 'Humor', 'Young Adult', 'Picture Books']   |         4.32 |
++-------------------------------------------+------------------+-------------------------------------------------------------------------------------------+--------------+
+| Falling Up                                | Shel Silverstein | ['Poetry', 'Childrens', 'Fiction', 'Humor', 'Classics', 'Picture Books', 'Young Adult']   |         4.35 |
++-------------------------------------------+------------------+-------------------------------------------------------------------------------------------+--------------+
+| The Missing Piece (The Missing Piece, #1) | Shel Silverstein | ['Poetry', 'Childrens', 'Picture Books', 'Fiction', 'Classics', 'Young Adult', 'Humor']   |         4.27 |
++-------------------------------------------+------------------+-------------------------------------------------------------------------------------------+--------------+
+| Oh, the Places You'll Go!                 | Dr. Seuss        | ['Childrens', 'Picture Books', 'Fiction', 'Classics', 'Poetry', 'Fantasy', 'Young Adult'] |         4.36 |
++-------------------------------------------+------------------+-------------------------------------------------------------------------------------------+--------------+
+| Lafcadio, the Lion Who Shot Back          | Shel Silverstein | ['Childrens', 'Fiction', 'Poetry', 'Picture Books', 'Humor', 'Fantasy', 'Young Adult']    |         4.16 |
++-------------------------------------------+------------------+-------------------------------------------------------------------------------------------+--------------+
+
+**Insight Rekomendasi untuk "The Giving Tree"**
+
+- Dominasi Karya Shel Silverstein
+Empat dari lima buku yang direkomendasikan ditulis oleh Shel Silverstein, yang juga merupakan penulis The Giving Tree. Hal ini menunjukkan bahwa model rekomendasi mengenali gaya penulisan, tema, dan target pembaca yang konsisten dari penulis tersebut. Ini menjadi sinyal kuat bahwa pembaca yang menyukai The Giving Tree kemungkinan besar akan menyukai karya lain dari penulis yang sama.
+
+- Genre yang Konsisten
+Semua buku yang direkomendasikan memiliki genre dominan:
+1. Childrens
+2. Poetry
+3. Picture Books
+4. Classics
+5. Humor atau Young Adult
+
+Ini menunjukkan bahwa model mengenali elemen emosional, visual, dan sastra sederhana namun mendalam yang menjadi karakteristik The Giving Tree, dan mencari buku dengan kombinasi genre yang serupa.
+
+- Rating Tinggi dan Konsisten
+Semua buku yang direkomendasikan memiliki rating di atas 4.1, dengan dua buku di atas 4.3. Artinya, model tidak hanya mempertimbangkan kemiripan konten, tetapi juga reputasi dan kepuasan pembaca sebagai faktor penting.
 
 
 ---
