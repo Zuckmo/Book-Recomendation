@@ -35,7 +35,7 @@ Bagaimana membangun sistem rekomendasi buku yang dapat memberikan saran bacaan r
 
 ---
 
-##  Data Understanding
+## 1. Data Understanding
 
 
 Dataset yang digunakan berasal dari Goodreads dan dapat diakses melalui tautan berikut:
@@ -62,7 +62,7 @@ Dataset ini berisi informasi mengenai **10.000 buku** dari Goodreads, dengan **8
 
 ---
 
-##  Exploratory Data Analysis
+## 2. Exploratory Data Analysis
 
 Analisis dilakukan untuk memahami tren dan distribusi data:
 
@@ -73,14 +73,14 @@ Analisis dilakukan untuk memahami tren dan distribusi data:
 
 ---
 
-##  Data Preparation
+## 3. Data Preparation
 
 
 Tahapan ini bertujuan untuk membersihkan, merapikan, dan menyiapkan data agar bisa digunakan secara efektif dalam sistem rekomendasi berbasis konten. Dataset awal terdiri dari 9.923 entri dan 8 kolom. Berikut adalah langkah-langkah utamanya:
 
 ---
 
-### 1. Pilih Fitur yang Relevan
+### 3.1 Pilih Fitur yang Relevan
 
 Langkah pertama adalah memilih kolom yang benar-benar diperlukan untuk membangun sistem rekomendasi. Kolom yang tidak relevan dihilangkan agar proses analisis lebih efisien dan fokus. Kolom yang dipilih antara lain:
 
@@ -91,9 +91,22 @@ Langkah pertama adalah memilih kolom yang benar-benar diperlukan untuk membangun
 - Rata-rata rating (`Avg_Rating`)
 - Jumlah rating (`Num_Ratings`)
 
+Dalam proses eksplorasi dan pembersihan data, kami menemukan bahwa terdapat dua kolom yang tidak memberikan kontribusi bermakna terhadap analisis maupun model prediksi, yaitu:
+
+a. `Unnamed: 0`
+Deskripsi: Ini adalah kolom yang secara otomatis dihasilkan saat menyimpan DataFrame ke file CSV tanpa menyetel index=False.
+
+Alasan Dihapus: Kolom ini hanyalah indeks baris dan tidak mengandung informasi yang relevan atau unik, sehingga aman untuk dihapus.
+
+b. `URL`
+Deskripsi: Berisi tautan (link) ke halaman buku di internet.
+
+Alasan Dihapus: Kolom ini hanya memuat informasi referensi eksternal yang tidak memiliki nilai prediktif terhadap fitur-fitur yang akan dianalisis atau dilatih dalam model machine learning.
+
+
 ---
 
-### 2. Tangani Nilai Hilang dan Duplikat
+### 3.2 Tangani Nilai Hilang dan Duplikat
 
 Data yang tidak lengkap atau duplikat dapat mengganggu proses analisis. Oleh karena itu:
 
@@ -102,24 +115,42 @@ Data yang tidak lengkap atau duplikat dapat mengganggu proses analisis. Oleh kar
 
 ---
 
-### 3. Bersihkan Teks dan Data
+### 3.3 Bersihkan Teks dan Data
 
 Pembersihan teks sangat penting terutama untuk analisis berbasis konten. Tahapan ini meliputi:
 
 #### a. Pembersihan Kolom Teks
 
-- Menghapus spasi kosong berlebih di awal/akhir pada kolom judul dan penulis.
-- Mengubah semua huruf di deskripsi menjadi huruf kecil (lowercase).
-- Menghapus karakter khusus seperti tanda baca, simbol, dan newline (`\n`).
-- Menghapus spasi yang berlebihan di dalam teks.
+- Pembersihan teks di kolom `book` dan `author`
+  Menghapus spasi kosong berlebih di awal/akhir pada kolom `book` dan `author`.
+  Untuk memastikan data bersih dan konsisten, dilakukan proses pembersihan pada kolom `Book` dan `Author` dengan menghapus spasi di awal dan akhir string.
+  Fungsi .str.strip() digunakan untuk menghapus spasi putih (whitespace) di awal dan akhir setiap nilai string.
+  
+- Pembersihan Teks pada Kolom `Description`
+  1. Mengubah semua huruf di deskripsi menjadi huruf kecil (lowercase).
+  Agar teks pada kolom `Description` siap untuk analisis atau pemodelan, dilakukan beberapa tahapan pembersihan sebagai berikut:
 
-#### b. Penambahan Fitur Baru
+  2. Menghapus karakter khusus seperti tanda baca, simbol, dan newline (`\n`).
+    Tujuan:
+      Menghilangkan karakter yang tidak relevan untuk analisis teks seperti:
+      - Tanda baca (.,!?)
+      - Simbol (@#$%^&*)
+      - Newline (\n) yang bisa memecah kalimat menjadi baris tidak rapi
+  
+      Membuat teks lebih bersih dan terstruktur
 
-- Membuat kolom baru untuk menyimpan versi teks deskripsi yang telah dibersihkan.
-- Menghitung panjang deskripsi (jumlah kata) sebagai fitur tambahan.
-- Memecah genre ke dalam bentuk daftar dan menyimpan genre utama sebagai fitur tambahan.
+  3. Menghapus spasi yang berlebihan di dalam teks.
+    Tujuan:
+      Mengganti spasi ganda atau lebih dengan satu spasi saja
+      Menghapus spasi di awal dan akhir kalimat
 
-#### c. Tangani Nilai Anomali
+### 3.4 Penambahan Fitur Baru
+
+- Membuat kolom baru untuk menyimpan versi teks deskripsi yang telah dibersihkan  agar tidak menimpa data asli. 
+- Menghitung panjang deskripsi (jumlah kata) sebagai fitur tambahan yang mana bisa digunakan untuk analisis distribusi panjang deskripsi.
+- Memecah genre ke dalam bentuk daftar agar lebih mudah dianalisis dan menyimpan genre utama sebagai fitur tambahan.
+
+### 3.5 Tangani Nilai Anomali
 
 Tiga kolom penting dianalisis nilainya:
 - `Avg_Rating` (rata-rata rating)
@@ -128,9 +159,17 @@ Tiga kolom penting dianalisis nilainya:
 
 Baris dengan nilai nol pada salah satu kolom di atas dihapus karena dianggap tidak informatif atau berpotensi menyesatkan analisis.
 
+Nilai nol di ketiga kolom ini bisa menjadi anomali atau noise dalam analisis, dengan alasan:
+
+- Avg_Rating = 0 Artinya buku belum memiliki rating sama sekali, bukan berarti ratingnya benar-benar nol. Ini bisa menyesatkan saat analisis kualitas buku.
+
+- Num_Ratings = 0 Buku tersebut belum pernah diberi rating oleh pengguna, sehingga tidak dapat diandalkan untuk analisis popularitas atau persepsi pembaca.
+
+- Desc_Length = 0 Buku tidak memiliki deskripsi. Ini akan menyulitkan dalam analisis berbasis teks seperti NLP atau pencarian konten.
+
 ---
 
-### 4. Representasi Teks dengan TF-IDF
+### 3.6 Representasi Teks dengan TF-IDF
 
 TF-IDF (Term Frequency – Inverse Document Frequency) digunakan untuk mengubah data teks menjadi format numerik yang bisa diproses oleh komputer.
 
@@ -140,7 +179,7 @@ TF-IDF (Term Frequency – Inverse Document Frequency) digunakan untuk mengubah 
 
 ---
 
-### 5. Normalisasi
+### 3.7 Normalisasi
 
 Normalisasi adalah proses mengubah nilai-nilai numerik agar berada dalam skala yang sama, misalnya 0–1. Ini penting untuk:
 
@@ -159,18 +198,18 @@ Setelah semua proses ini, fitur-fitur dari teks, genre, dan angka digabung menja
 
 ---
 
-##  Model Development
+## 4. Model Development
 
-### Algoritma:
+### 4.1 Algoritma:
 - Menggunakan **cosine similarity** antara vektor buku.
 - Content-based filtering: pengguna mendapatkan rekomendasi berdasarkan kemiripan deskripsi dan genre dari buku yang mereka pilih.
 
-### Fungsi:
+### 4.2 Fungsi:
 - `recommend(book_title, top_n)`: Rekomendasi berdasarkan judul.
 - `get_recommendations(book_id, k)`: Rekomendasi berdasarkan ID (untuk evaluasi).
 - `recommend_partial(book_title)`: Fuzzy matching untuk pencarian.
 
-### Penjelasan Output: Similarity Matrix
+### 4.3 Penjelasan Output: Similarity Matrix
 - Shape dari similarity matrix: (9850, 9850)
 - Terdapat 9.850 buku unik dalam sistem rekomendasi.
 - Matriks ini adalah matriks simetri ukuran 9850 x 9850.
@@ -191,7 +230,7 @@ Misalnya: Buku ke-0 paling mirip dengan buku ke-2 (nilai 0.555042).
 
 ---
 
-Contoh Rekomendasi buku untuk 'The Giving Tree':
+### 4.4 Contoh Rekomendasi buku untuk 'The Giving Tree':
 
 | Book                               | Author          | Genres                                                                                             | Avg_Rating |
 |------------------------------------|------------------|----------------------------------------------------------------------------------------------------|-------------|
@@ -223,14 +262,14 @@ Semua buku yang direkomendasikan memiliki rating di atas 4.1, dengan dua buku di
 
 ---
 
-##  Evaluasi
+## 5. Evaluasi
 
-### 1. Precision
+### 5.1 Precision
 Average Precision (AP): 0.73
 
 Nilai Average Precision sebesar 0.73 menunjukkan bahwa rekomendasi yang diberikan cukup akurat pada level individual—artinya, urutan item yang direkomendasikan cukup tepat dalam mencakup item yang relevan. Skor ini dekat dengan 1, yang berarti precision di antara daftar rekomendasi cukup baik.
 
-### 2. Mean Average Precision (MAP)
+### 5.2 Mean Average Precision (MAP)
 Mean Average Precision (MAP): 0.47
 
 Nilai MAP sebesar 0.47 menunjukkan rata-rata dari precision across multiple queries (dalam hal ini, mungkin rekomendasi untuk beberapa pengguna atau buku). Meskipun nilainya tidak setinggi AP individual, MAP = 0.47 masih dapat dikategorikan sebagai hasil yang cukup baik untuk sistem rekomendasi berbasis konten (content-based filtering). Artinya, dari semua pengguna/buku yang diuji, secara rata-rata sistem mampu memberikan rekomendasi yang relevan hampir separuh dari daftar yang diberikan.
